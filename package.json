@@ -1,11 +1,12 @@
 {
-    "name": "Hacker app RESTful API",
+    "name": "Hacker app backend",
     "version": "1.0.0",
     "description": "",
     "main": "src/server.ts",
     "scripts": {
         "build": "rm -rf build/ && tsc",
-        "dev": "nodemon src/server.ts"
+        "dev": "nodemon src/server.ts",
+        "start": "ts-node src/server.ts"
     },
     "keywords": [],
     "author": "",
