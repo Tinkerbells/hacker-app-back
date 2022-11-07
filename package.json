@@ -1,0 +1,37 @@
+{
+    "name": "Hacker app RESTful API",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/server.ts",
+    "scripts": {
+        "build": "rm -rf build/ && tsc",
+        "dev": "nodemon src/server.ts"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/cookie-parser": "^1.4.3",
+        "@types/nodemailer": "^6.4.6",
+        "nodemon": "^2.0.16",
+        "ts-node": "^10.8.1",
+        "typescript": "^4.7.3"
+    },
+    "dependencies": {
+        "@types/bcrypt": "^5.0.0",
+        "@types/express": "^4.17.13",
+        "@types/jsonwebtoken": "^8.5.8",
+        "axios": "^0.27.2",
+        "bcrypt": "^5.0.1",
+        "chalk": "^4.1.2",
+        "cookie": "^0.5.0",
+        "cookie-parser": "^1.4.6",
+        "crypto": "^1.0.1",
+        "dotenv": "^16.0.1",
+        "express": "^4.18.1",
+        "joi": "^17.6.0",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^6.3.6",
+        "nodemailer": "^6.8.0"
+    }
+}
