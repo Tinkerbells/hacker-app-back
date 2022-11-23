@@ -7,6 +7,7 @@ import hashPassword from '../utils/hashPassword';
 import checkPassword from '../utils/checkPassword';
 import generateAccessToken from '../utils/generateAccessToken';
 import transporter from '../utils/sendEmail';
+import checkAccessToken from '../utils/checkAccessToken';
 
 const createUser = (req: Request, res: Response, next: NextFunction) => {
     const { userName, email } = req.body;
@@ -41,6 +42,7 @@ const createUser = (req: Request, res: Response, next: NextFunction) => {
         .then((user) => res.status(201).json({ user }))
         .catch((error) => res.status(500).json({ error }));
 };
+
 const verifyUser = (req: Request, res: Response, next: NextFunction) => {
     const activationCode = req.body.activationCode;
     return User.findOne({ activationCode }).then((user) => {
@@ -103,10 +105,41 @@ const deleteUser = (req: Request, res: Response, next: NextFunction) => {
         .catch((error) => res.status(500).json({ error }));
 };
 
+const getUserWithToken = (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers['authorization'];
+
+    if (token == null) return res.status(401).json({ message: 'Access token is missing' });
+    const userId = checkAccessToken(token);
+
+    return User.findByIdAndDelete(userId)
+        .then((user) => (user ? res.status(201).json({ user, message: 'Deleted' }) : res.status(404).json({ message: 'not found' })))
+        .catch((error) => res.status(500).json({ error }));
+};
+
+const updateUserWithToken = (req: Request, res: Response, next: NextFunction) => {
+    const token = req.headers['authorization'];
+
+    if (token == null) return res.status(401).json({ message: 'Access token is missing' });
+    const userId = checkAccessToken(token);
+
+    return User.findById(userId)
+        .then((user) => {
+            if (user) {
+                req.body.password = hashPassword(req.body.password);
+                user.set(req.body);
+                return user
+                    .save()
+                    .then((user) => res.status(201).json({ user }))
+                    .catch((error) => res.status(500).json({ error }));
+            } else {
+                return res.status(404).json({ message: 'not found' });
+            }
+        })
+        .catch((error) => res.status(500).json({ error }));
+};
+
 const getUser = (req: Request, res: Response, next: NextFunction) => {
     const userId = req.params.userId;
-
-    console.log(userId);
     return User.findById(userId)
         .then((user) => (user ? res.status(201).json({ user }) : res.status(404).json({ message: 'Not found' })))
         .catch((error) => res.status(500).json({ error }));
@@ -124,6 +157,8 @@ export default {
     deleteUser,
     loginUser,
     updateUser,
+    updateUserWithToken,
     getUser,
+    getUserWithToken,
     getUserList
 };
