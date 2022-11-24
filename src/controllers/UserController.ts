@@ -111,8 +111,8 @@ const getUserWithToken = (req: Request, res: Response, next: NextFunction) => {
     if (token == null) return res.status(401).json({ message: 'Access token is missing' });
     const userId = checkAccessToken(token);
 
-    return User.findByIdAndDelete(userId)
-        .then((user) => (user ? res.status(201).json({ user, message: 'Deleted' }) : res.status(404).json({ message: 'not found' })))
+    return User.findById(userId)
+        .then((user) => (user ? res.status(201).json({ user }) : res.status(404).json({ message: 'Not found' })))
         .catch((error) => res.status(500).json({ error }));
 };
 
