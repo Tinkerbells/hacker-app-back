@@ -1,21 +1,21 @@
-import Joi, { ObjectSchema } from 'joi'
-import { NextFunction, Request, Response } from 'express'
-import { IUser } from '../models/User'
-import Logging from '../library/Logging'
+import Joi, { ObjectSchema } from 'joi';
+import { NextFunction, Request, Response } from 'express';
+import { IUser } from '../models/User';
+import Logging from '../library/Logging';
 
 export const ValidateJoi = (schema: ObjectSchema) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
-            await schema.validateAsync(req.body)
+            await schema.validateAsync(req.body);
 
-            next()
+            next();
         } catch (error) {
-            Logging.error(error)
+            Logging.error(error);
 
-            return res.status(422).json({ error })
+            return res.status(422).json({ error });
         }
-    }
-}
+    };
+};
 
 export const Schemas = {
     user: {
@@ -38,7 +38,7 @@ export const Schemas = {
                     minDomainSegments: 2
                 })
                 .label('Email'),
-            password: Joi.string().required().min(6).label('Password'),
+            password: Joi.string(),
             level: Joi.number(),
             exp: Joi.number(),
             money: Joi.number()
@@ -52,4 +52,4 @@ export const Schemas = {
             password: Joi.string().required().min(6).label('Password')
         })
     }
-}
+};

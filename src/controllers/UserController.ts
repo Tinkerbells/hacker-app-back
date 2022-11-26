@@ -125,7 +125,6 @@ const updateUserWithToken = (req: Request, res: Response, next: NextFunction) =>
     return User.findById(userId)
         .then((user) => {
             if (user) {
-                req.body.password = hashPassword(req.body.password);
                 user.set(req.body);
                 return user
                     .save()
